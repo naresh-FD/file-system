@@ -1,5 +1,3 @@
-// ...
-
 const BASE_URL = 'https://jsonplaceholder.typicode.com/users';
 
 const users = fetch(BASE_URL)
@@ -12,9 +10,7 @@ const printUsers = async () => {
   const a = await users;
   localStorage.setItem('user', JSON.stringify(a));
 };
-printUsers();
 
-console.log(printUsers());
 const foo = localStorage.getItem('user');
 // Fs system functions
 
@@ -23,7 +19,7 @@ window.webkitRequestFileSystem(window.PERSISTENT, 1024 * 1024, SaveDatFileBro);
 async function SaveDatFileBro(localstorage) {
   localstorage.root.getFile('123.json', { create: true }, async function (DatFile) {
     await DatFile.createWriter(async function (DatContent) {
-      const blob = await new Blob([JSON.stringify(foo)], { type: 'application/json' });
+      const blob = await new Blob([foo], { type: 'application/json' });
       DatContent.write(blob);
     });
   });
@@ -32,16 +28,25 @@ async function SaveDatFileBro(localstorage) {
 // console.log('testing', SaveDatFileBro());
 
 function readTextFile(file) {
-  var rawFile = new XMLHttpRequest();
+  console.log(file);
+  let rawFile = new XMLHttpRequest();
+
   rawFile.open('GET', file, false);
   rawFile.onreadystatechange = function () {
     if (rawFile.readyState === 4) {
-      if (rawFile.status === 200 || rawFile.status == 0) {
-        var allText = rawFile.responseText;
-        console.log(allText);
+      if (rawFile.status === 200 || rawFile.status === 0) {
+        let allText = rawFile.responseText;
+        // console.log(typeof JSON.parse(allText));
+        return JSON.parse(allText);
       }
     }
   };
-  rawFile.send(null);
+  // console.log(rawFile);
+  return rawFile;
 }
-readTextFile('filesystem:http://127.0.0.1:5500/persistent/123.json');
+
+const txt = JSON.stringify(readTextFile(`filesystem:${window.location.href}/persistent/123.json`));
+
+console.log(readTextFile(`filesystem:${window.location.href}/persistent/123.json`));
+
+document.getElementById('swt').innerHTML = txt;
