@@ -13,6 +13,9 @@ const printUsers = async () => {
   localStorage.setItem('user', JSON.stringify(a));
 };
 printUsers();
+
+console.log(printUsers());
+const foo = localStorage.getItem('user');
 // Fs system functions
 
 const root = this;
@@ -20,7 +23,7 @@ window.webkitRequestFileSystem(window.PERSISTENT, 1024 * 1024, SaveDatFileBro);
 async function SaveDatFileBro(localstorage) {
   localstorage.root.getFile('123.json', { create: true }, async function (DatFile) {
     await DatFile.createWriter(async function (DatContent) {
-      const blob = await new Blob([JSON.stringify(bar)], { type: 'application/json' });
+      const blob = await new Blob([JSON.stringify(foo)], { type: 'application/json' });
       DatContent.write(blob);
     });
   });
